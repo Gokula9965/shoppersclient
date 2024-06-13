@@ -11,7 +11,6 @@ const SingleProduct = () => {
   const [singleProduct, setSingleProduct] = useState();
   const [mainImage, setMainImage] = useState();
   const [rating, setRating] = useState(0);
-  const [reviewerName, setReviewerName] = useState("");
   const [reviewData, setReviewData] = useState([]);
   const [comment, setComment] = useState("");
   const [value, setValue] = useState(2);
@@ -20,8 +19,9 @@ const SingleProduct = () => {
     alertMessage,
     alertSeverity,
     setAlertMessage,
+    authName,
     setAlertSeverity,} = useContext(DataContext);
- 
+    const [reviewerName, setReviewerName] = useState(authName);
   useEffect(() => {
     const fetchSingleProduct = async () => {
       try {
@@ -64,7 +64,6 @@ const SingleProduct = () => {
       setAlertMessage("Thank you for your review");
         setAlertSeverity("success");
        setShowAlert(true);
-       setReviewerName("");
        setValue(2);
        setComment("");
       }
