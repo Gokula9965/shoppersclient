@@ -119,7 +119,7 @@ const ProductList = () => {
         back
       </Button>
       <Typography variant="h5" align="center" style={{ padding: 10 }}>
-        {category.toUpperCase()}
+        {category ==='mens' ? "Mens".toUpperCase():category==='womens'?"womens".toUpperCase():category==='beauty'?"cosmetics".toUpperCase():category==='smart'?"smart Devices".toUpperCase():category==='sports'?"sports".toUpperCase():category==='groceries'?"groceries".toUpperCase():category==="decorify"?"Decoration Items".toUpperCase():"Home Appliances".toUpperCase()}
       </Typography>
       <Grid container spacing={3} sx={{ padding: 5 }}>
         {products.map((product) => (

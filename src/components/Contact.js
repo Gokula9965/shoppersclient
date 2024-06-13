@@ -185,7 +185,7 @@ const ContactUs = () => {
               <Alert
                 onClose={() => setShowAlert(false)}
                 severity={alertSeverity}
-                sx={{ width: "100%", color: "white", background: "green" }}
+                sx={{ width: "100%"}}
               >
                 {alertMessage}
               </Alert>

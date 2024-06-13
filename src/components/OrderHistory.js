@@ -81,7 +81,7 @@ const OrderHistory = () => {
                                   OrderId :{order?.orderId}
                               </Typography>
                               <Box>
-                                  <Typography variant="body1">OrderedAt:{new Date(order?.orderedAt).toLocaleDateString()}</Typography>
+                                  <Typography variant="body1">OrderedAt :{new Date(order?.orderedAt).toLocaleString()}</Typography>
                               </Box>
                               <List dense>
                                   {

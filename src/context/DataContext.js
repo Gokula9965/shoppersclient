@@ -59,6 +59,7 @@ export const DataProvider = ({ children }) => {
   function handleLogout(e) {
     e.preventDefault();
     setAuthName("");
+    setToken("");
     localStorage.clear();
     handleMenuClose();
     setCount(0);

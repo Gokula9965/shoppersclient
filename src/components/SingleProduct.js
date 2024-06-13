@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardMedia, Container, Grid, IconButton, Paper, Rating, TextField, Typography } from "@mui/material";
+import { Alert, Avatar, Box, Button, Card, CardMedia, Container, Grid, IconButton, Paper, Rating, Snackbar, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -10,18 +10,28 @@ const SingleProduct = () => {
   const [singleProduct, setSingleProduct] = useState();
   const [mainImage, setMainImage] = useState();
   const [rating, setRating] = useState(0);
-  const { handleCart,quantity, setQuantity } = useContext(DataContext);
-
+  const [reviewerName, setReviewerName] = useState("");
+  const [reviewData, setReviewData] = useState([]);
+  const [comment, setComment] = useState("");
+  const [value, setValue] = useState(2);
+  const { handleCart,quantity, setQuantity,   showAlert,
+    setShowAlert,
+    alertMessage,
+    alertSeverity,
+    setAlertMessage,
+    setAlertSeverity,} = useContext(DataContext);
+ 
   useEffect(() => {
     const fetchSingleProduct = async () => {
       try {
         const getProduct = await axios.get(
           `http://localhost:5000/products/getProduct/${id}`
-        );
+        );  
         const data = getProduct?.data;
         setSingleProduct(data);
         setMainImage(data?.thumbnail);
         setRating(data?.rating)
+        setReviewData(data?.reviews);
       } catch (error) {
         console.log(error);
       }
@@ -39,7 +49,34 @@ const SingleProduct = () => {
     const data = { _id, title, price, thumbnail, quantity, category };
     handleCart(data);   
   }
+  async function handleReview(id) {
+    const rating = value;
+    const currentDate = new Date();
+    const date = currentDate.toISOString();
+    const reviewDetails = { rating, comment, reviewerName, date };
+    try {
+      const status = await axios.patch(`http://localhost:5000/products/addReview/${id}`, reviewDetails);
+      console.log(status);
+     if(status?.data?.msg==="updated")
+     {
+       setReviewData([ reviewDetails,...reviewData]);
+      setAlertMessage("Thank you for your review");
+        setAlertSeverity("success");
+       setShowAlert(true);
+       setReviewerName("");
+       setValue(2);
+       setComment("");
+      }
+    }
+    catch (error)
+    {
+      setAlertMessage("Can't add your review");
+      setAlertSeverity("error");
+      setShowAlert(true);
+      console.log(error);
+    }
 
+  }
   return (
   
     <Container maxWidth="md" sx={{ padding: "70px", margin: "auto" }}>
@@ -99,12 +136,64 @@ const SingleProduct = () => {
           </Box>
         </Grid>
       </Grid>
+      <Box component='form' mt={4}>
+        <Snackbar
+              open={showAlert}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              autoHideDuration={2000}
+              onClose={() => setShowAlert(false)}
+            >
+              <Alert
+                onClose={() => setShowAlert(false)}
+                severity={alertSeverity}
+                sx={{ width: "100%", color: "white", background: "green" }}
+              >
+                {alertMessage}
+              </Alert>
+            </Snackbar>
+          <Typography variant='h5' component='h2' gutterBottom sx={{mb:2}}>
+            Add a Review
+          </Typography>
+          <TextField
+            sx={{mb:2}}
+            label="Name"
+            required
+            fullWidth
+            autoComplete="off"
+            variant='outlined'
+            value={reviewerName}
+            onChange={(e)=>setReviewerName(e.target.value)}
+          />
+          <Rating
+            sx={{mb:2}}
+            name='simple-controlled'
+            label="Rating"
+            value={value}
+            onChange={(e,newValue)=>setValue(newValue)}
+          />
+
+          <TextField
+            sx={{mb:2}}
+            label='Comment'
+            variant='outlined'
+            multiline
+            rows={4}
+            fullWidth
+            required
+            value={comment}
+            onChange={(e)=>setComment(e.target.value)}
+          />
+
+          <Button variant='contained' style={{backgroundColor:"#FF681F",color:"white"}} onClick={()=>handleReview(singleProduct?._id)}>
+           Submit Review
+          </Button>
+        </Box>
       <Box mt={4}>
         <Typography variant='h5' component='h2' gutterBottom>
           Customer Reviews
         </Typography>
         {
-          singleProduct?.reviews?.map((rev, index) => (
+         reviewData?.map((rev, index) => (
             <Paper key={index} elevation={3} sx={{padding:'16px',marginBottom: '16px' }}>
               <Box display="flex" alignItems="center" mb={2}>
                 <Avatar  alt={rev.reviewerName} style={{ backgroundColor:"violet",marginRight:"16px"

@@ -1,29 +1,35 @@
-import React, { useState, useContext } from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import InputBase from "@mui/material/InputBase";
+import React, { useContext } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Box,
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
+  Avatar,
+  Badge,
+  Modal,
+  Menu,
+  MenuItem,
+  InputBase,
+} from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Search as SearchIcon,
+  ShoppingCart as ShoppingCartIcon,
+  Login as LoginIcon,
+  Close as CloseIcon,
+} from "@mui/icons-material";
 import { alpha, styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
-import { Avatar, Badge, Modal } from "@mui/material";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import "@fontsource/montez";
 import DataContext from "../context/DataContext";
 import { useNavigate } from "react-router-dom";
-import LoginIcon from "@mui/icons-material/Login";
-import CloseIcon from "@mui/icons-material/Close";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -91,28 +97,30 @@ const Navbar = () => {
     count,
     popUpOpen,
     handleCartClick,
-    handlePopUpClose
+    handlePopUpClose,
+    token,
   } = useContext(DataContext);
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   function scrollToView(id) {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
   }
-  
+
   function handleMenuClick(title) {
-    if (title === "Home") {
+    if (title === "Home" && token) {
       navigate("/");
+    } else if (title === "Home" && !token) {
+      navigate("/login");
     } else if (title === "Products") {
       scrollToView("products");
+    } else if (title === "Contact Us") {
+      scrollToView("contact");
     }
-    else if (title === "Contact Us")
-    {
-      scrollToView("contact")
-      }
     handleDrawerToggle();
   }
 
@@ -130,11 +138,7 @@ const Navbar = () => {
     >
       <List>
         {menu.map((item) => (
-          <ListItem
-            button
-            key={item.title}
-            onClick={() => handleMenuClick(item.title)}
-          >
+          <ListItem button key={item.title} onClick={() => handleMenuClick(item.title)}>
             <ListItemText primary={item.title} />
           </ListItem>
         ))}
@@ -145,48 +149,37 @@ const Navbar = () => {
   return (
     <>
       <AppBar position="sticky" style={{ backgroundColor: "#0e1b20" }}>
-        <Toolbar>
-          {isMobile && (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-          {isMobile && (
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {isMobile && (
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
             <Typography
-              variant={theme.breakpoints.values.sm ? "h3" : "h5"}
+              variant={isMobile ? "h6" : "h1"}
               noWrap
-              sx={{ flexGrow: 1, fontFamily: "'montez','cursive'" }}
+              sx={{
+                fontFamily: "'montez', 'cursive'",
+                fontSize: isMobile ? "1.8rem" : "50px",
+                whiteSpace: 'nowrap',
+              }}
             >
-              S
+              {isMobile ? "S" : "Shoppers"}
             </Typography>
-          )}
-          {!isMobile && (
-            <Typography
-              variant="h3"
-              style={{ fontFamily: "'montez','cursive'" }}
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Shoppers
-            </Typography>
-          )}
-
-          <Box sx={{ display: "flex", flexGrow: -1, justifyContent: "center" }}>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {!isMobile && (
               <>
-                <Button color="inherit" onClick={() => navigate("/")}>
+                <Button color="inherit" onClick={token ? () => navigate("/") : () => navigate("/login")}>
                   Home
                 </Button>
-                <Button
-                  color="inherit"
-                  onClick={() => scrollToView("products")}
-                >
+                <Button color="inherit" onClick={() => scrollToView("products")}>
                   Products
                 </Button>
                 <Button color="inherit" onClick={() => scrollToView("contact")}>
@@ -198,48 +191,36 @@ const Navbar = () => {
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-              />
+              <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
             </Search>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            {authName && (
-              <>
-                <IconButton color="inherit" onClick={()=>handleCartClick("navbar")}>
-                  <Badge badgeContent={count} color="error">
-                    <ShoppingCartIcon />
-                  </Badge>
-                </IconButton>
-                <IconButton color="inherit" onClick={handleMenuOpen}>
-                  <Avatar style={{ backgroundColor: "#ff00ff" }}>
-                    {authName[0].toUpperCase()}
-                  </Avatar>
-                </IconButton>
-              </>
-            )}
-            {!authName && (
-              <Button
-                color="secondary"
-                endIcon={<LoginIcon />}
-                onClick={() => navigate("/login")}
-              >
-                Login
-              </Button>
-            )}
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              {authName ? (
+                <>
+                  <IconButton color="inherit" onClick={() => handleCartClick("navbar")}>
+                    <Badge badgeContent={count} color="error">
+                      <ShoppingCartIcon />
+                    </Badge>
+                  </IconButton>
+                  <IconButton color="inherit" onClick={handleMenuOpen}>
+                    <Avatar style={{ backgroundColor: "#ff00ff" }}>
+                      {authName[0].toUpperCase()}
+                    </Avatar>
+                  </IconButton>
+                </>
+              ) : (
+                <Button color="secondary" endIcon={<LoginIcon />} onClick={() => navigate("/login")}>
+                  Login
+                </Button>
+              )}
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerToggle}>
         {drawer}
       </Drawer>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={()=>navigate("/orders")}>My Orders</MenuItem>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+        <MenuItem onClick={() => navigate("/orders")}>My Orders</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
       <Modal
@@ -250,21 +231,18 @@ const Navbar = () => {
       >
         <Box
           sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
             width: 300,
-            bgcolor: 'background.paper',
-            border: '2px solid #000',
+            bgcolor: "background.paper",
+            border: "2px solid #000",
             boxShadow: 24,
             p: 4,
           }}
         >
-          <IconButton
-            sx={{ position: 'absolute', top: 8, right: 8 }}
-            onClick={handlePopUpClose}
-          >
+          <IconButton sx={{ position: "absolute", top: 8, right: 8 }} onClick={handlePopUpClose}>
             <CloseIcon />
           </IconButton>
           <Typography id="empty-cart-popup" variant="h6" component="h2">
