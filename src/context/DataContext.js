@@ -124,7 +124,7 @@ export const DataProvider = ({ children }) => {
         }
       } catch (error) {
         console.log(error);
-        setAlertMessage(`${error.response.data.message}`);
+        setAlertMessage(`${error?.response?.data?.message}`);
         setAlertSeverity("error");
         setShowAlert(true);
       }
@@ -174,7 +174,7 @@ export const DataProvider = ({ children }) => {
             console.log(cartCounts?.data?.cartCount);
             setCount(cartCounts?.data?.cartCount);
           } catch (error) {
-            setAlertMessage(`${error.response.data.message}`);
+            setAlertMessage(`${error?.response?.data?.message}`);
             setAlertSeverity("error");
             setShowAlert(true);
           }

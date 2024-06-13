@@ -111,6 +111,9 @@ const SingleProduct = () => {
           <Typography variant="body1" gutterBottom style={{ textAlign: "justify" }}>
             {singleProduct?.description}
           </Typography>
+          <Typography variant="body1" gutterBottom style={{ fontWeight: "bold" }}>
+            InStock : {singleProduct?.stock}
+          </Typography>
           <Typography variant="h5" component='p' gutterBottom>
           {Math.trunc(singleProduct?.price * 84 ).toLocaleString("en-IN", {
                 style: "currency",

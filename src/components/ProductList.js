@@ -76,6 +76,7 @@ const StyledIconButton = styled(IconButton)({
 const ProductList = () => {
   const { category } = useParams();
   const [products, setProducts] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
   const navigate = useNavigate("");
   const { handleCart, quantity } = useContext(DataContext);
   useEffect(() => {
@@ -98,6 +99,10 @@ const ProductList = () => {
   function handleCartDetails(_id, title, price, thumbnail, quantity,category) {
     const data = { _id, title, price, thumbnail, quantity,category};
     handleCart(data);
+  }
+  function handleIsClicked() 
+  {
+    setIsClicked(!isClicked);
   }
   return (
     <>
@@ -163,7 +168,11 @@ const ProductList = () => {
                   >
                     <AddShoppingCartIcon style={{ fontSize: "2rem" }} />
                   </StyledIconButton>
-                  <StyledIconButton onClick={(e) => handleStopProgation(e)}>
+                  <StyledIconButton key={product?._id} onClick={(e) => {
+                    handleStopProgation(e);
+                    handleIsClicked();
+                   }
+                  } style={{color:isClicked?"red":null}}>
                     <FavoriteIcon style={{ fontSize: "2rem" }} />
                   </StyledIconButton>
                   <StyledIconButton onClick={(e) => handleStopProgation(e)}>
