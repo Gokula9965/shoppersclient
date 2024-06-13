@@ -26,7 +26,7 @@ const OrderHistory = () => {
             }
         }
         fetchCustomerOrders();
-    },[orderItems,token])
+    },[orderItems])
     async function downloadInvoice(order)
     {
         const shipping = {

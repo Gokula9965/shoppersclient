@@ -77,7 +77,7 @@ const CartList = () => {
       }
     };
     fetchCartItems();
-  },[setCartItems,setCount,token,cartItems]);
+  },[cartItems,count]);
   return (
     <Box
       sx={{
