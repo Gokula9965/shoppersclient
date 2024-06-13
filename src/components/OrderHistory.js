@@ -2,6 +2,7 @@ import { Avatar, Box, Button, Container, Grid, List, ListItem, ListItemAvatar, L
 import React, { useContext, useEffect, useState } from "react";
 import DataContext from "../context/DataContext";
 import axios from "axios";
+import BACKENDURL from "../Api";
 
 const OrderHistory = () => {
     const [orderItems, setOrderItems] = useState([]);
@@ -10,7 +11,7 @@ const OrderHistory = () => {
         
         const fetchCustomerOrders = async () => {
             try {
-                const customerData = await axios.get("http://localhost:5000/customer/getCutomerData",
+                const customerData = await axios.get(`${BACKENDURL}/customer/getCutomerData`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -41,7 +42,7 @@ const OrderHistory = () => {
         const invoice_number = order?.invoiceNumber;
         const downLoadInvoiceData = { shipping, orderId, totalAmount, items, invoice_number };
         try {
-            const response = await axios.post("http://localhost:5000/pdf/pdf-invoice", downLoadInvoiceData, {
+            const response = await axios.post(`${BACKENDURL}/pdf/pdf-invoice`, downLoadInvoiceData, {
                 responseType:'blob'
             });
 

@@ -29,6 +29,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import DataContext from "../context/DataContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import BACKENDURL from "../Api";
 const CartList = () => {
   const {
     cartItems,
@@ -61,7 +62,7 @@ const CartList = () => {
     const fetchCartItems = async () => {
       try {
         const cartItemsFromDb = await axios.get(
-          "http://localhost:5000/cart/getCartItems",
+          `${BACKENDURL}/cart/getCartItems`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

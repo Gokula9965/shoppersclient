@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DataContext from "../context/DataContext";
+import BACKENDURL from "../Api";
 const SingleProduct = () => {
   const { id } = useParams();
   const [singleProduct, setSingleProduct] = useState();
@@ -25,7 +26,7 @@ const SingleProduct = () => {
     const fetchSingleProduct = async () => {
       try {
         const getProduct = await axios.get(
-          `http://localhost:5000/products/getProduct/${id}`
+          `${BACKENDURL}/products/getProduct/${id}`
         );  
         const data = getProduct?.data;
         setSingleProduct(data);
@@ -55,7 +56,7 @@ const SingleProduct = () => {
     const date = currentDate.toISOString();
     const reviewDetails = { rating, comment, reviewerName, date };
     try {
-      const status = await axios.patch(`http://localhost:5000/products/addReview/${id}`, reviewDetails);
+      const status = await axios.patch(`${BACKENDURL}/products/addReview/${id}`, reviewDetails);
       console.log(status);
      if(status?.data?.msg==="updated")
      {

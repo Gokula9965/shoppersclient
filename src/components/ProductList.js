@@ -15,6 +15,7 @@ import axios from "axios";
 import { Button } from "@mui/material";
 import { ArrowBackIosNew } from "@mui/icons-material";
 import DataContext from "../context/DataContext";
+import BACKENDURL from "../Api";
 
 const ProductCard = styled(Card)(({ theme }) => ({
   maxWidth: 250,
@@ -81,7 +82,7 @@ const ProductList = () => {
     const fetchProducts = async () => {
       try {
         const fetchedData = await axios.get(
-          `http://localhost:5000/products/${category}`
+          `${BACKENDURL}/products/${category}`
         );
         const productsData = fetchedData?.data?.data;
         setProducts(productsData);

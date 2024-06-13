@@ -12,6 +12,7 @@ import Shipping from "./Shipping";
 import Review from "./Review";
 import DataContext from "../../context/DataContext";
 import { useNavigate } from "react-router-dom";
+import BACKENDURL from "../../Api";
 function getActiveStep(step) {
   switch (step) {
     case 0:
@@ -173,7 +174,7 @@ const Checkout = () => {
     const amount = parseInt(total) * 100;
     const currency = "INR";
     const receiptId = "qwsaq1";
-    const response = await fetch("http://localhost:5000/payment/order", {
+    const response = await fetch(`${BACKENDURL}/payment/order`, {
       method: "POST",
       body: JSON.stringify({
         amount,
@@ -199,7 +200,7 @@ const Checkout = () => {
           ...response,
         };
         const validateRes = await fetch(
-          "http://localhost:5000/payment/order/validate",
+          `${BACKENDURL}/payment/order/validate`,
           {
             method: "POST",
             body: JSON.stringify(body),

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import BACKENDURL from "../Api";
 const DataContext = createContext({});
 export const DataProvider = ({ children }) => {
   const navigate = useNavigate("");
@@ -104,7 +104,7 @@ export const DataProvider = ({ children }) => {
     if (userName && password && emailId && !containsOnlyNumbers(userName)) {
       try {
         const response = await axios.post(
-          "http://localhost:5000/user/register",
+          `${BACKENDURL}/user/register`,
           { userName, emailId, password }
         );
         if (response.status === 200) {
@@ -142,7 +142,8 @@ export const DataProvider = ({ children }) => {
     }
     if (emailId && password) {
       try {
-        const response = await axios.post("http://localhost:5000/user/login", {
+        console.log(BACKENDURL);
+        const response = await axios.post(`${BACKENDURL}/user/login`, {
           emailId,
           password,
         });
@@ -151,7 +152,7 @@ export const DataProvider = ({ children }) => {
           setToken(accessToken);
           try {
             const currentUser = await axios.get(
-              "http://localhost:5000/user/currentUser",
+              `${BACKENDURL}/user/currentUser`,
               {
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
@@ -163,7 +164,7 @@ export const DataProvider = ({ children }) => {
             currentData.accessToken = accessToken;
             localStorage.setItem("currentUser", JSON.stringify(currentData));
             const cartCounts = await axios.get(
-              "http://localhost:5000/cart/getCart",
+              `${BACKENDURL}/cart/getCart`,
               {
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
@@ -219,7 +220,7 @@ export const DataProvider = ({ children }) => {
     if (emailId && password === confirmPassword) {
       try {
         const response = await axios.patch(
-          "http://localhost:5000/user/reset-password",
+          `${BACKENDURL}/user/reset-password`,
           { emailId, password }
         );
         if (response?.status === 200) {
@@ -241,7 +242,7 @@ export const DataProvider = ({ children }) => {
   async function handleCart(data) {
     try {
       const addToCartAndGetTheCount = await axios.post(
-        "http://localhost:5000/cart/addToCart",
+        `${BACKENDURL}/cart/addToCart`,
         data,
         {
           headers: {
@@ -260,7 +261,7 @@ export const DataProvider = ({ children }) => {
     try {
       console.log(id);
       const cartResponse = await axios.delete(
-        `http://localhost:5000/cart/deleteCart/${id}`,
+        `${BACKENDURL}/cart/deleteCart/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -278,7 +279,7 @@ export const DataProvider = ({ children }) => {
       const data = { id, quantity };
       try {
         const response = await axios.patch(
-          "http://localhost:5000/cart/updateCart",
+          `${BACKENDURL}/cart/updateCart`,
           data,
           {
             headers: {
@@ -316,7 +317,7 @@ export const DataProvider = ({ children }) => {
   async function handleCustomer(data) {
     try {
       const response = await axios.post(
-        "http://localhost:5000/customer/addItem",
+        `${BACKENDURL}/customer/addItem`,
         data,
         {
           headers: {
@@ -334,7 +335,7 @@ export const DataProvider = ({ children }) => {
   async function handleDeletAllCart(){
     try {
       const response = await axios.delete(
-        "http://localhost:5000/cart/deleteAllCart",
+        `${BACKENDURL}/cart/deleteAllCart`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -350,7 +351,7 @@ export const DataProvider = ({ children }) => {
   }
   async function handleInvoiceEmail(invoiceData) {
     try {
-      const invoiceResponse = await axios.post("http://localhost:5000/pdf/pdfEmail",invoiceData);
+      const invoiceResponse = await axios.post(`${BACKENDURL}/pdf/pdfEmail`,invoiceData);
       console.log(invoiceResponse?.data);
     }
     catch (error)
@@ -366,7 +367,7 @@ export const DataProvider = ({ children }) => {
       if (storedUser?.exp && currentTimestamp < storedUser?.exp) {
         try {
           const cartCounts = await axios.get(
-            "http://localhost:5000/cart/getCart",
+            `${BACKENDURL}/cart/getCart`,
             {
               headers: {
                 Authorization: `Bearer ${storedUser?.accessToken}`,
