@@ -133,7 +133,7 @@ const Login = () => {
             Forget Password ?
           </Link>
           <Typography sx={{ mt: 2, mb: 2 }}>
-            Do you have account ?{" "}
+            Don't you have account ?{" "}
             <Link to="/register" style={{ textDecoration: "none" }}>
               Sign Up
             </Link>
