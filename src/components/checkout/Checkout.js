@@ -55,9 +55,11 @@ const Checkout = () => {
     setEmailError,
     setPhoneError,
     cartItems,
+    tax,
     handleCustomer,
     handleDeletAllCart,
-    handleInvoiceEmail
+    handleInvoiceEmail,
+    handleStockReduction
   } = useContext(DataContext);
   const navigate = useNavigate();
   const [orderId, setOrderId] = useState("");
@@ -129,6 +131,7 @@ const Checkout = () => {
       const data = checkoutData;
       const orderId = generateRandomNumberWithHash();
       data.orderId = orderId;
+      const dataToReduceStock = cartItems;
       cartItems.forEach((obj) => {
         delete obj?._id;
         delete obj?.userId;
@@ -149,8 +152,9 @@ const Checkout = () => {
       const totalAmount = total;
       const invoice_number = invoiceNumberWithHash();
       const emailId = email;
-      const invoiceData = { shipping, items, orderId, totalAmount, invoice_number, emailId };
+      const invoiceData = { shipping, items, orderId, totalAmount, invoice_number, emailId ,tax};
       data.invoiceNumber = invoice_number;
+      data.tax = tax;
       setFirstName("");
       setLastName("");
       setEmail("");
@@ -161,6 +165,7 @@ const Checkout = () => {
       setPostalCode("");
       handleCustomer(data);
       handleDeletAllCart();
+      handleStockReduction(dataToReduceStock);
       setOrderId(data.orderId);
       setActiveStep((previousStep) => previousStep + 1);
       handleInvoiceEmail(invoiceData);

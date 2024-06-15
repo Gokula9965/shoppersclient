@@ -130,7 +130,7 @@ const SingleProduct = () => {
               inputProps={{ min: 0, style: { textAlign: "center", width: '40px' } }}
               variant="outlined"
             />
-             <IconButton onClick={()=>handleQuantity(1)}>
+             <IconButton onClick={singleProduct?.stock > quantity?()=>handleQuantity(1):null}>
               <AddIcon/>
             </IconButton>
             <Button variant="contained" style={{backgroundColor:"#FF681F",color:"white"}} sx={{ marginLeft: '16px'}} onClick={()=>handleCartDetails(singleProduct?._id,singleProduct?.title,singleProduct?.price,singleProduct?.thumbnail,singleProduct?.category)}>

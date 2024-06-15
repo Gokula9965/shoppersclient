@@ -99,6 +99,8 @@ const Navbar = () => {
     handleCartClick,
     handlePopUpClose,
     token,
+    searchProducts,
+    setSearchProducts
   } = useContext(DataContext);
   const navigate = useNavigate();
   const theme = useTheme();
@@ -187,7 +189,10 @@ const Navbar = () => {
                 </Button>
               </>
             )}
-            <Search>
+            <Search
+              value={searchProducts}
+              onChange={(e)=>setSearchProducts(e.target.value)}
+            >
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
@@ -216,9 +221,11 @@ const Navbar = () => {
           </Box>
         </Toolbar>
       </AppBar>
-      <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerToggle}>
-        {drawer}
-      </Drawer>
+      {token &&
+        <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerToggle}>
+          {drawer}
+        </Drawer>
+      }
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
         <MenuItem onClick={() => navigate("/orders")}>My Orders</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>

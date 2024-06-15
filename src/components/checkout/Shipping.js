@@ -14,7 +14,6 @@ const Shipping = () => {
   function handleCityChange(event, value) {
     setCity(value?.city || "");
     setState(value?.state || "");
-    setPostalCode(value?.postalCode || "");
   }
   return (
     <>
@@ -121,6 +120,7 @@ const Shipping = () => {
             fullWidth
             required
             value={postalCode}
+            onChange={(e)=>setPostalCode(e?.target?.value)}
             variant="standard"
           />
         </Grid>

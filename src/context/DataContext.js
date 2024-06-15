@@ -45,6 +45,7 @@ export const DataProvider = ({ children }) => {
   const [tax, setTax] = useState(0);
   const [total, setTotal] = useState(0);
   const [popUpOpen, setPopUpOpen] = useState(false);
+  const [searchProducts, setSearchProducts] = useState("");
   function handleDrawerToggle() {
     setDrawerOpen(!drawerOpen);
   }
@@ -359,6 +360,16 @@ export const DataProvider = ({ children }) => {
       console.log(error);
     }
   }
+  async function handleStockReduction(dataToReduceStock) {
+    try {
+      const responseAboutStock = await axios.patch(`${BACKENDURL}/products/product/stockUpdate`, dataToReduceStock);
+      console.log(responseAboutStock);
+    }
+    catch (error)
+    {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     const fetchStorage = async () => {
       const storedUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -486,7 +497,10 @@ export const DataProvider = ({ children }) => {
         handlePopUpClose,
         handleCustomer,
         handleDeletAllCart,
-        handleInvoiceEmail
+        handleInvoiceEmail,
+        handleStockReduction,
+        searchProducts,
+        setSearchProducts
       }}
     >
       {children}

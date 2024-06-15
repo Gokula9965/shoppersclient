@@ -40,7 +40,8 @@ const OrderHistory = () => {
         const totalAmount = order?.totalAmount;
         const items = order?.customerItems;
         const invoice_number = order?.invoiceNumber;
-        const downLoadInvoiceData = { shipping, orderId, totalAmount, items, invoice_number };
+        const tax = order?.tax;
+        const downLoadInvoiceData = { shipping, orderId, totalAmount, tax,items, invoice_number };
         try {
             const response = await axios.post(`${BACKENDURL}/pdf/pdf-invoice`, downLoadInvoiceData, {
                 responseType:'blob'
