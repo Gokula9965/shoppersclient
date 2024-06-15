@@ -389,7 +389,7 @@ export const DataProvider = ({ children }) => {
           setCount(cartCounts?.data?.cartCount);
           setAuthName(storedUser?.user?.userName);
           setToken(storedUser?.accessToken);
-          navigate("/");
+         
         } catch (error) {
           console.log(error);
         }

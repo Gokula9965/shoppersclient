@@ -94,7 +94,7 @@ const ProductList = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [originalProducts, setOriginalProducts] = useState([]);
   const navigate = useNavigate("");
-  const { handleCart, quantity ,searchProducts} = useContext(DataContext);
+  const { handleCart, quantity ,searchProducts,setSearchProducts} = useContext(DataContext);
   
   useEffect(() => {
     const fetchProducts = async () => {
@@ -105,12 +105,13 @@ const ProductList = () => {
         const productsData = fetchedData?.data?.data;
         setProducts(productsData);
         setOriginalProducts(productsData);
+        setSearchProducts("");
       } catch (error) {
         console.log(error);
       }
     };
     fetchProducts();
-  }, [category]);
+  }, [category,setSearchProducts]);
   useEffect(() => {
     if (searchProducts.length > 0) {
       const filterProducts = originalProducts?.filter((product) => ((product?.title?.toLowerCase()).includes(searchProducts.toLowerCase())));
