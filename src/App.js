@@ -1,8 +1,8 @@
 // src/App.js
 import { CssBaseline } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import { DataProvider } from "./context/DataContext";
+import DataContext from "./context/DataContext";
 import Login from "./components/auth/Login";
 import ResetPassword from "./components/auth/ResetPassword";
 import Register from "./components/auth/Register";
@@ -15,9 +15,11 @@ import Checkout from "./components/checkout/Checkout";
 import OrdersHistory from "./components/OrderHistory";
 
 function App() {
+  const { token } = useContext(DataContext);
+  console.log("token in app", token);
   return (
     <div>
-      <DataProvider>
+    
         <CssBaseline />
         <Link to='/' />
         <Link to='/singleProduct/:id' />
@@ -28,16 +30,16 @@ function App() {
         <Navbar/>
         <Routes>
           <Route path='/' element={<Header/>}/>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={!token?<Login />:<Header/>} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={!token?<Register />:<Header/>} />
           <Route path="/products/:category" element={ <ProductList/>} />
           <Route path="/singleProduct/:id" element={<SingleProduct />} />
           <Route path='/cartlist' element={<CartList />} />
           <Route path='/checkout' element={<Checkout />} />
           <Route path='/orders' element={<OrdersHistory/> } />
         </Routes>
-      </DataProvider>
+   
     </div>
   );
 }
