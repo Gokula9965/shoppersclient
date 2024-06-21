@@ -16,7 +16,6 @@ import OrdersHistory from "./components/OrderHistory";
 
 function App() {
   const { token } = useContext(DataContext);
-  console.log("token in app", token);
   return (
     <div>
     
